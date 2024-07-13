@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Common multiple comparison procedures illustrated using graphicalMCP</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">
+/* for pandoc --citeproc since 2.11 */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Common multiple comparison procedures
+illustrated using graphicalMCP</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(graphicalMCP)</span></code></pre></div>
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>In confirmatory clinical trials, regulatory guidelines mandate the
+strong control of the family-wise error rate at a prespecified level
+<span class="math inline">\(\alpha\)</span>. Many multiple comparison
+procedures (MCPs) have been proposed for this purpose. The graphical
+approaches are a general framework that include many common MCPs as
+special cases. In this vignette, we illustrate how to use graphicalMCP
+to perform some common MCPs.</p>
+<p>To test <span class="math inline">\(m\)</span> hypotheses using a
+graphical MCP, each hypothesis <span class="math inline">\(H_i\)</span>
+receives a weight <span class="math inline">\(0\leq w_i\leq 1\)</span>
+(called hypothesis weight), where <span class="math inline">\(\sum_{i=1}^{m}w_i\leq 1\)</span>. From <span class="math inline">\(H_i\)</span> to <span class="math inline">\(H_j\)</span>, there could be a directed and
+weighted edge <span class="math inline">\(0\leq g_{ij}\leq 1\)</span>,
+which means that when <span class="math inline">\(H_i\)</span> is
+rejected, its hypothesis weight will be propagated (or transferred) to
+<span class="math inline">\(H_j\)</span> and <span class="math inline">\(g_{ij}\)</span> determines how much of the
+propagation. We also require <span class="math inline">\(\sum_{j=1}^{m}g_{ij}\leq 1\)</span> and <span class="math inline">\(g_{ii}=0\)</span>.</p>
+</div>
+<div id="bonferroni-based-procedures" class="section level1">
+<h1>Bonferroni-based procedures</h1>
+<div id="weighted-bonferroni-test" class="section level2">
+<h2>Weighted Bonferroni test</h2>
+<p>A weighted Bonferroni test splits <span class="math inline">\(\alpha\)</span> among hypotheses by testing every
+hypothesis at a significance level of <span class="math inline">\(w_i\alpha\)</span>. Thus it rejects a hypothesis
+if its p-value is less than or equal to its significance level. When
+<span class="math inline">\(w_i=w_j\)</span> for all <span class="math inline">\(i,j\)</span>, this means an equal split and the
+test is the Bonferroni test. There is no propagation between any pair of
+hypothesis.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> <span class="fl">0.025</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>bonferroni_graph <span class="ot">&lt;-</span> <span class="fu">bonferroni</span>(<span class="fu">rep</span>(<span class="dv">1</span> <span class="sc">/</span> m, m))</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># transitions &lt;- matrix(0, m, m)</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># bonferroni_graph &lt;- graph_create(rep(1 / m, m), transitions)</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  bonferroni_graph,</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">layout =</span> igraph<span class="sc">::</span><span class="fu">layout_in_circle</span>(</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_igraph</span>(bonferroni_graph),</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">order =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">3</span>)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">vertex.size =</span> <span class="dv">70</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>p_values <span class="ot">&lt;-</span> <span class="fu">runif</span>(m, <span class="dv">0</span>, alpha)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>test_results <span class="ot">&lt;-</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">graph_test_shortcut</span>(</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    bonferroni_graph,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">p =</span> p_values,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> alpha</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>test_results<span class="sc">$</span>outputs<span class="sc">$</span>rejected</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    H1    H2    H3 </span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  TRUE FALSE FALSE</span></span></code></pre></div>
+</div>
+<div id="holm-procedure" class="section level2">
+<h2>Holm Procedure</h2>
+<p>Holm (or Bonferroni-Holm) procedures improve over Bonferroni tests by
+allowing propagation <span class="citation">(Holm 1979)</span>. In other
+words, transition weights between hypotheses may not be zero. So it is
+uniformly more powerful than Bonferroni tests.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> <span class="fl">0.025</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>holm_graph <span class="ot">&lt;-</span> <span class="fu">bonferroni_holm</span>(<span class="fu">rep</span>(<span class="dv">1</span> <span class="sc">/</span> m, m))</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co"># transitions &lt;- matrix(1 / (m - 1), m, m)</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co"># diag(transitions) &lt;- 0</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># holm_graph &lt;- graph_create(rep(1 / m, m), transitions)</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(holm_graph,</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">layout =</span> igraph<span class="sc">::</span><span class="fu">layout_in_circle</span>(</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_igraph</span>(holm_graph),</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">order =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">3</span>)</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">vertex.size =</span> <span class="dv">70</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>p_values <span class="ot">&lt;-</span> <span class="fu">runif</span>(m, <span class="dv">0</span>, alpha)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>test_results <span class="ot">&lt;-</span> <span class="fu">graph_test_shortcut</span>(holm_graph, <span class="at">p =</span> p_values, <span class="at">alpha =</span> alpha)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>test_results<span class="sc">$</span>outputs<span class="sc">$</span>rejected</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    H1    H2    H3 </span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  TRUE FALSE FALSE</span></span></code></pre></div>
+</div>
+<div id="fixed-sequence-procedure" class="section level2">
+<h2>Fixed sequence procedure</h2>
+<p>Fixed sequence (or hierarchical) procedures pre-specify an order of
+testing [<span class="citation">Maurer, Hothorn, and Lehmacher
+(1995)</span>;westfall-2001-optimally]. For example, the procedure will
+test <span class="math inline">\(H_1\)</span> first. If it is rejected,
+it will test <span class="math inline">\(H_2\)</span>; otherwise the
+testing stops. If <span class="math inline">\(H_2\)</span> is rejected,
+it will test <span class="math inline">\(H_3\)</span>; otherwise the
+testing stops. For each hypothesis, it will be tested at the full <span class="math inline">\(\alpha\)</span> level, when it can be tested.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> <span class="fl">0.025</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>fixed_sequence_graph <span class="ot">&lt;-</span> <span class="fu">fixed_sequence</span>(m)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># transitions &lt;- rbind(</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#   c(0, 1, 0),</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">#   c(0, 0, 1),</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">#   c(0, 0, 0)</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co"># fixed_sequence_graph &lt;- graph_create(c(1, 0, 0), transitions)</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fixed_sequence_graph, <span class="at">nrow =</span> <span class="dv">1</span>, <span class="at">asp =</span> <span class="fl">0.05</span>, <span class="at">vertex.size =</span> <span class="dv">40</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAbAAAABWCAMAAACZ+jMzAAAAh1BMVEUAAAAAADEAADoAAFYAJl8AJ3kAOpAARpkYAAAYADEYJ3kYRpkYYrgrAAArADErAFYrfNY8JwA8J1Y8fNY8ldZMRgBMRjFMrtZcYjFcrtZmAABrfFZrfHlrlXlrlbhrrplrrrhrrtaQOgCQ2/+RXyaRqampqam2ZgDbkDrb/////7b//9v///8RwfPVAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAEWUlEQVR4nO2da5uTMBCF0XVdb6tWu5a11hbvF/7/7xMo+LRCZiZhyOTUnA99toFlXs6hQGkIRZ0FpcIaIMtPOTAw5cDAlAMDUw4MTDkwMOXAwJQDA1MODEw5MDDlwMCUAwNTDgxMOTAw5cDAlAMDUw4MTH6BFYMWotERBmUgpnjubtHVoFT9wKCcgymb8XTx1WmhYOQlhEE5E1My12SBocw8eEVhUM7G5OchKiRkBgalAiY3B1MhETMwKFUwmel8ha6K2iqFCYNSB5OeLCth7QUGpRImNbWSljD1AoNSDZOYKNjjnhSxMgODUg/TPcmnQldlgdXkhUGpiOmc4vERNrQCg1IT0znFt4SNFxiUmpiuCf4lLLzAoFTFdLSHlIjvBQalLuZ0c1iJ2F5gUCpj5sDAMCdbQ0vE9QKDUhszBwaGOdU4UeKwKoridVU2rzftu+t7cy84yv1t+7c1pTqmMLCqKq82zevuSbPwpkaagZ1SHt5sGkscVtgGdoq5f7Xp34UHNv0ZPi51f9tZUDoDi+YFR/lh3W7KN8aULObHxsj9y7Uc82ID63SXfGCtds89zLzowA4r84OYAHP3zMfMcZPjrKbsO9FxgUXqmiqhJKyI1YFWgNn87TqGTWHKAxN+wiJtvBLK6p3r2BDtIybCLIsXcsxLDqx07RCjUcoCO6wuLLBvYU5sGxt2b6NRhmI2unNuWbMD676HNRXiBjZhBU+5bQ8SzqPDEoEFYVaeZx2jlukSoy/nD5yHB+54/vvT45++TrTypDwe112n9fxZRyDmeROP2W5WxNY/kc+owfnPQjFW/HpfhAV2ZsbSlOli6gfG7m1+hDpxYsbylKliggU22JF4YAtiLhLYv+jn+vLoKz2DQCpOgGBGCIxWopsuCGb0k45EDg78talEMXECi0wZiHne9B8HFp0yVUzxlY5eRO+AXqwT3/2dGLfRlKX7Z3cpZaqYnoFRvQNkVjTfSIuHn/2cmGgjKbdXm7/X6cIo08X0/YSR131FVuiIoux+t9zSnLZX62dgqgdm+wNmp93Tdf9iTbkA5iUGtm2vhdM7mxQCC8MU9+kYxAVm26dD6oRxn44ZmBcb2PBjky2lPqZ2YNGGhyMo+YNDvEHs1DHFPX8HMYEZ9/zt1J1+kZzWPX9nYHoHRvUOiLnpkjub63vy2BBzlEhtTM+7V+jeAcncvcJcQkjl7pUQTN3bjaIOcIpBqY05zY5xbyMGZcq3zEYeQRiDUhnTAR9UJPqIzxiUupgu+oAiBiN0Y1CqYjrxMcaYwaCMMRKOfxETJ0AoFTHVAjN6ZAEGpSImsQIYIxFiUMYYL7H22C5MnwiCQamFSa+DsIjxE1wwKJUwmZUQFbF2AoRSB5NbC37fWycwIjwGpQomvxp0lSSMqFEoFTAlK+KukowRNQrlbEzZqrSP3hktv07tuUEYlDMxxSvTP+TquPThXXLCoJyD6bc+GM++w6Bc+gl9WWnoDw86uRjf142QAAAAAElFTkSuQmCC" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>p_values <span class="ot">&lt;-</span> <span class="fu">runif</span>(m, <span class="dv">0</span>, alpha)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>test_results <span class="ot">&lt;-</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">graph_test_shortcut</span>(</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    fixed_sequence_graph,</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">p =</span> p_values,</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> alpha</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>test_results<span class="sc">$</span>outputs<span class="sc">$</span>rejected</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   H1   H2   H3 </span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; TRUE TRUE TRUE</span></span></code></pre></div>
+</div>
+<div id="fallback-procedure" class="section level2">
+<h2>Fallback procedure</h2>
+<p>Fallback procedures have one-way propagation (like fixed sequence
+procedures) but allow hypotheses to be tested at different significance
+levels <span class="citation">(Wiens 2003)</span>.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> <span class="fl">0.025</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>fallback_graph <span class="ot">&lt;-</span> <span class="fu">fallback</span>(<span class="fu">rep</span>(<span class="dv">1</span> <span class="sc">/</span> <span class="dv">3</span>, <span class="dv">3</span>))</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># transitions &lt;- rbind(</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">#   c(0, 1, 0),</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">#   c(0, 0, 1),</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">#   c(0, 0, 0)</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co"># fallback_graph &lt;- graph_create(rep(1 / 3, 3), transitions)</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fallback_graph, <span class="at">nrow =</span> <span class="dv">1</span>, <span class="at">asp =</span> <span class="fl">0.05</span>, <span class="at">vertex.size =</span> <span class="dv">40</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAbAAAABWCAMAAACZ+jMzAAAAh1BMVEUAAAAAADEAADoAAFYAJl8AJ3kAOpAARpkYAAAYADEYJ3kYRpkYYrgrAAArADErAFYrfNY8JwA8J1Y8fNY8ldZMRgBMRjFMrtZcYjFcrtZmAABrfFZrfHlrlXlrlbhrrplrrrhrrtaQOgCQ2/+RXyaRqampqam2ZgDbkDrb/////7b//9v///8RwfPVAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAEcUlEQVR4nO2dfWOTMBDG0alT55zTzaK1tvj+0u//+QTabHTNJZdwueSpef4oa2DcL/cAoQRCs62CUpMboCpM1TAwVcPAVA0DUzUMTNUwMFXDwFQNA1M1DEzVMDBVw8BUDQNTNQxM1TAwVcPAVA0DUzUMTGGGNUaJaGSEQRmJyV56XHVnVGo+MCjnYPIWnK6+mwaKRk4hDMqZmJylrAFMmHnwgsKgnI3pX8YRoaBkYFAKYPqW8EQoJBkYlCKYnvn+CGMUsSrFCYNSBtM9mxcidy4wKIUwXXM7boisucCgFMN0zGQccSdBciUDg1IOk54VEmGMkqCafmFQCmKScwJ24YypwKCUxCTnhIbIkwsMSklMakZ4iBy5wKAUxSTKY0Lo5wKDUhbTXhwXQjsXGJTCmNUwMExraWwI3VxgUEpjVsPAMG2FlhCb66Zp3nRt/3k+fHv6IXsufJTry+Hv3JTimEzDuq49W/Sfq+f9yvsYZRo2pdy8XfQpIVKR17Ap5vpqsf8Wb5h9H96tdX05pqAlDVPLhY/y082wKZ9npvRifu4TuX59w8c8WcNG3RZv2KDVRUAyT9qwzXX2RoyBuXoZkszjIuKspt3fROczTOnWVA6lIxVaN9AyMPu/qTbMhsk3jLmHKW28HMruPdU2qO1iLMy2ecXHPGXDWuqAqEbJM2xzfWKG/YjLxLJPw+qdGmUsZq9bcsuabdj4O6yPoGuYJRV+yuXQSJCtQwrDojC7wLOOoxJ7iKMf54/I5sHXnv/98ux3aCYGBVLu2nXqtN5/1hGJeVjkxxw2K8fWb/HnqID8Z6Y8qfjzsYkz7CAZqSnLxZQ3zHu0+RWbiUky0lOWiglmmElH4YYlxExi2EP0Q3178t29AEMimQDBVDDMrUI3XRBM9ZOOQhoH/7WpQjFxDFOmjMQ8LPqPDVOnLBXTfaWjve++Nl3Z1PRO3kz8DM/EcVlyylIxnYYtzxbmepfpyqam7FT0v0ibx1/DMmEpS0xZLqbLsLH/b7m7cGK6sqlpyLYrIQzKBJguw1YvbvYf++8X7uko9Q7MkikTYLoMWw57510fwN1FZWqaybCSKRNguu7pOIxhurKp6V7q93QUTSmP6TXMdNp0913Z1DSjYaVSymO6DHt42DVd2dR0kNrwcBiU8piuO3/HE5vp3QCmK5ua2reJRMKgFMd03qrdn4XeN5OshlJx/EUMSnFM99Mrux/nw7MPpiubmupvuiCU0piyjxupDnCKQSmNaWfHeLYRg7LkR2aVRxDGoBTGJOCjgqiP+IxBKYtJ0UcEyTBCNwalKCaJjzHGDAalxkg44UGyZAKEUhBTzLBMryzAoBTEdFQAYyRCDEqN8RK3AdtF1jeCYFBKYbrrwAyS+Q0uGJRCmJ5KsILkzgQIpQymrxb+Y++2gBHhMShFMP3VcEcpIhFbFEoBTE5F6CjFJGKLQjkbk1eV4dU7R+vflvbeIAzKmZjsyuxfcrVbu/lWnDAo52CG1acxCiVUFQZl6jf0VZWhf2A+lgL7N4WTAAAAAElFTkSuQmCC" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>p_values <span class="ot">&lt;-</span> <span class="fu">runif</span>(m, <span class="dv">0</span>, alpha)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>test_results <span class="ot">&lt;-</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">graph_test_shortcut</span>(</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    fallback_graph,</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">p =</span> p_values,</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> alpha</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>test_results<span class="sc">$</span>outputs<span class="sc">$</span>rejected</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   H1   H2   H3 </span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; TRUE TRUE TRUE</span></span></code></pre></div>
+<p>Further they can be improved to allow propagation from later
+hypotheses to earlier hypotheses, because it is possible that a later
+hypothesis is rejected before an earlier hypothesis can be rejected.
+There are two versions of improvement: <code>fallback_improved_1</code>
+due to <span class="citation">(Wiens and Dmitrienko 2005)</span> and
+<code>fallback_improved_2</code> due to <span class="citation">(Bretz et
+al. 2009)</span> respectively.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> <span class="fl">0.025</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>fallback_improved_1_graph <span class="ot">&lt;-</span> <span class="fu">fallback_improved_1</span>(<span class="fu">rep</span>(<span class="dv">1</span> <span class="sc">/</span> <span class="dv">3</span>, <span class="dv">3</span>))</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># hypotheses &lt;- rep(1 / 3, 3)</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co"># transitions &lt;- rbind(</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co">#   c(0, 1, 0),</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co">#   c(0, 0, 1),</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co">#   c(hypotheses[seq_len(m - 1)] / sum(hypotheses[seq_len(m - 1)]), 0)</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="co"># fallback_improved_1_graph &lt;- graph_create(rep(1 / 3, 3), transitions)</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  fallback_improved_1_graph,</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">nrow =</span> <span class="dv">1</span>,</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">asp =</span> <span class="fl">0.05</span>,</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">vertex.size =</span> <span class="dv">40</span>,</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">edge_curves =</span> <span class="fu">c</span>(<span class="st">&quot;pairs&quot;</span> <span class="ot">=</span> <span class="dv">7</span>, <span class="st">&quot;H3|H1&quot;</span> <span class="ot">=</span> <span class="sc">-</span><span class="dv">10</span>)</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>epsilon <span class="ot">&lt;-</span> <span class="fl">0.0001</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>fallback_improved_2_graph <span class="ot">&lt;-</span> <span class="fu">fallback_improved_2</span>(<span class="fu">rep</span>(<span class="dv">1</span> <span class="sc">/</span> <span class="dv">3</span>, <span class="dv">3</span>), epsilon)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># hypotheses &lt;- rep(1 / 3, 3)</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co"># transitions &lt;- rbind(</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co">#   c(0, 1, 0),</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co">#   c(1 - epsilon, 0, epsilon),</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co">#   c(1, 0, 0)</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="co"># fallback_improved_2_graph &lt;- graph_create(rep(1 / 3, 3), transitions)</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>  fallback_improved_2_graph,</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">nrow =</span> <span class="dv">1</span>,</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">asp =</span> <span class="fl">0.05</span>,</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">eps =</span> <span class="fl">0.0001</span>,</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">edge_curves =</span> <span class="fu">c</span>(<span class="st">&quot;pairs&quot;</span> <span class="ot">=</span> <span class="dv">7</span>, <span class="st">&quot;H3|H1&quot;</span> <span class="ot">=</span> <span class="sc">-</span><span class="dv">10</span>),</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">vertex.size =</span> <span class="dv">40</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>p_values <span class="ot">&lt;-</span> <span class="fu">runif</span>(m, <span class="dv">0</span>, alpha)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>test_results <span class="ot">&lt;-</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">graph_test_shortcut</span>(</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    fallback_improved_2_graph,</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">p =</span> p_values,</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> alpha</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>test_results<span class="sc">$</span>outputs<span class="sc">$</span>rejected</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   H1   H2   H3 </span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; TRUE TRUE TRUE</span></span></code></pre></div>
+</div>
+<div id="serial-gatekeeping-procedure" class="section level2">
+<h2>Serial gatekeeping procedure</h2>
+<p>Serial gatekeeping procedures involve ordered multiple families of
+hypotheses, where all hypotheses of a family of hypotheses must be
+rejected before proceeding in the test sequence. The example below
+considers a primary family consisting of two hypotheses <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_2\)</span> and a secondary family consisting of
+a single hypothesis <span class="math inline">\(H_3\)</span>. In the
+primary family, the Holm procedure is applied. If both <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_2\)</span> are rejected, <span class="math inline">\(H_3\)</span> can be tested at level <span class="math inline">\(\alpha\)</span>; otherwise <span class="math inline">\(H_3\)</span> cannot be rejected. To allow the
+conditional propagation to <span class="math inline">\(H_3\)</span>, an
+<span class="math inline">\(\varepsilon\)</span> edge is used from <span class="math inline">\(H_2\)</span> to <span class="math inline">\(H_3\)</span>. It has a very small transition
+weight so that <span class="math inline">\(H_2\)</span> propagates most
+of its hypothesis weight to <span class="math inline">\(H_1\)</span> (if
+not already rejected) and retains a small (non-zero) weight for <span class="math inline">\(H_3\)</span> so that if <span class="math inline">\(H_1\)</span> has been rejected, all hypothesis
+weight of <span class="math inline">\(H_2\)</span> will be propagated to
+<span class="math inline">\(H_3\)</span>. Here <span class="math inline">\(\varepsilon\)</span> is assigned to be 0.0001 and
+in practice, the value could be adjusted but it should be much smaller
+than the smallest p-value observed.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> <span class="fl">0.025</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>epsilon <span class="ot">&lt;-</span> <span class="fl">0.0001</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>transitions <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>),</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="dv">1</span> <span class="sc">-</span> epsilon, <span class="dv">0</span>, epsilon),</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>)</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>serial_gatekeeping_graph <span class="ot">&lt;-</span> <span class="fu">graph_create</span>(<span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="dv">0</span>), transitions)</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  serial_gatekeeping_graph,</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">nrow =</span> <span class="dv">1</span>,</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">asp =</span> <span class="fl">0.05</span>,</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">eps =</span> <span class="fl">0.0001</span>,</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">edge_curves =</span> <span class="fu">c</span>(<span class="st">&quot;pairs&quot;</span> <span class="ot">=</span> <span class="dv">7</span>, <span class="st">&quot;H3|H1&quot;</span> <span class="ot">=</span> <span class="sc">-</span><span class="dv">10</span>),</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">vertex.size =</span> <span class="dv">40</span></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>p_values <span class="ot">&lt;-</span> <span class="fu">runif</span>(m, <span class="dv">0</span>, alpha)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>test_results <span class="ot">&lt;-</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">graph_test_shortcut</span>(</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    serial_gatekeeping_graph,</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">p =</span> p_values,</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> alpha</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>test_results<span class="sc">$</span>outputs<span class="sc">$</span>rejected</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   H1   H2   H3 </span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; TRUE TRUE TRUE</span></span></code></pre></div>
+</div>
+<div id="parallel-gatekeeping-procedure" class="section level2">
+<h2>Parallel gatekeeping procedure</h2>
+<p>Parallel gatekeeping procedures also involve multiple ordered
+families of hypotheses, where any null hypotheses of a family of
+hypotheses must be rejected before proceeding in the test sequence <span class="citation">(Dmitrienko, Offen, and Westfall 2003)</span>. The
+example below considers a primary family consisting of two hypotheses
+<span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_2\)</span> and a secondary family consisting of
+two hypotheses <span class="math inline">\(H_3\)</span> and <span class="math inline">\(H_4\)</span>. In the primary family, the
+Bonferroni test is applied. If any of <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_2\)</span> is rejected, <span class="math inline">\(H_3\)</span> and <span class="math inline">\(H_4\)</span> can be tested at level <span class="math inline">\(\alpha/2\)</span> using the Holm procedure; if
+both <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_2\)</span> are rejected, <span class="math inline">\(H_3\)</span> and <span class="math inline">\(H_4\)</span> can be tested at level <span class="math inline">\(\alpha\)</span> using the Holm procedure;
+otherwise <span class="math inline">\(H_3\)</span> and <span class="math inline">\(H_4\)</span> cannot be rejected.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> <span class="fl">0.025</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="dv">4</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>transitions <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>),</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>),</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>),</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>)</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>parallel_gatekeeping_graph <span class="ot">&lt;-</span> <span class="fu">graph_create</span>(<span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="dv">0</span>, <span class="dv">0</span>), transitions)</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(parallel_gatekeeping_graph, <span class="at">vertex.size =</span> <span class="dv">70</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>p_values <span class="ot">&lt;-</span> <span class="fu">runif</span>(m, <span class="dv">0</span>, alpha)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>test_results <span class="ot">&lt;-</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">graph_test_shortcut</span>(</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    parallel_gatekeeping_graph,</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">p =</span> p_values,</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> alpha</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>test_results<span class="sc">$</span>outputs<span class="sc">$</span>rejected</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    H1    H2    H3    H4 </span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  TRUE FALSE FALSE FALSE</span></span></code></pre></div>
+<p>The above parallel gatekeeping procedure can be improved by adding
+<span class="math inline">\(\varepsilon\)</span> edges from secondary
+hypotheses to primary hypotheses, because it is possible that both
+secondary hypotheses are rejected but there is still a remaining primary
+hypothesis not rejected <span class="citation">(Bretz et al.
+2009)</span>.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> <span class="fl">0.025</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="dv">4</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>epsilon <span class="ot">&lt;-</span> <span class="fl">0.0001</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>transitions <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>),</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>),</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(epsilon, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span> <span class="sc">-</span> epsilon),</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="dv">0</span>, epsilon, <span class="dv">1</span> <span class="sc">-</span> epsilon, <span class="dv">0</span>)</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>parallel_gatekeeping_improved_graph <span class="ot">&lt;-</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">graph_create</span>(<span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="dv">0</span>, <span class="dv">0</span>), transitions)</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(parallel_gatekeeping_improved_graph, <span class="at">eps =</span> <span class="fl">0.0001</span>, <span class="at">vertex.size =</span> <span class="dv">70</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>p_values <span class="ot">&lt;-</span> <span class="fu">runif</span>(m, <span class="dv">0</span>, alpha)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>test_results <span class="ot">&lt;-</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">graph_test_shortcut</span>(</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    parallel_gatekeeping_improved_graph,</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">p =</span> p_values,</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> alpha</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>test_results<span class="sc">$</span>outputs<span class="sc">$</span>rejected</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    H1    H2    H3    H4 </span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  TRUE FALSE FALSE FALSE</span></span></code></pre></div>
+</div>
+<div id="successive-procedure" class="section level2">
+<h2>Successive procedure</h2>
+<p>Successive procedures incorporate successive relationships between
+hypotheses. For example, the secondary hypothesis is not tested until
+the primary hypothesis has been rejected. This is similar to using the
+fixed sequence procedure as a component of a graph. The example below
+considers two primary hypotheses <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_2\)</span> and two secondary hypotheses <span class="math inline">\(H_3\)</span> and <span class="math inline">\(H_4\)</span>. Primary hypotheses <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_2\)</span> receive the equal hypothesis weight
+of 0.5; secondary hypotheses <span class="math inline">\(H_3\)</span>
+and <span class="math inline">\(H_4\)</span> receive the hypothesis
+weight of 0. A secondary hypothesis <span class="math inline">\(H_3
+(H_4)\)</span> can be tested only if the corresponding primary
+hypothesis <span class="math inline">\(H_1 (H_2)\)</span> has been
+rejected. This represents the successive relationships between <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_3\)</span>, and <span class="math inline">\(H_2\)</span> and <span class="math inline">\(H_4\)</span>, respectively <span class="citation">(Maurer, Glimm, and Bretz 2011)</span>. If both <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_3\)</span> are rejected, their hypothesis
+weights are propagated to <span class="math inline">\(H_2\)</span> and
+<span class="math inline">\(H_4\)</span>, and vice versa.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> <span class="fl">0.025</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="dv">4</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>simple_successive_graph <span class="ot">&lt;-</span> <span class="fu">simple_successive_1</span>()</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co"># transitions &lt;- rbind(</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="co">#   c(0, 0, 1, 0),</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="co">#   c(0, 0, 0, 1),</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="co">#   c(0, 1, 0, 0),</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="co">#   c(1, 0, 0, 0)</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="co"># simple_successive_graph &lt;- graph_create(c(0.5, 0.5, 0, 0), transitions)</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(simple_successive_graph, <span class="at">layout =</span> <span class="st">&quot;grid&quot;</span>, <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">vertex.size =</span> <span class="dv">70</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASAAAAEgCAMAAAAjXV6yAAAAk1BMVEUAAAAAADEAADoAAFYAJl8AJ3kAOpAARpkYAAAYADEYJ3kYRpkYYrgrAAArADErAFYrRpkrfNY8JwA8J1Y8YjE8fNY8ldZMRgBMRjFMRlZMrtZcYjFcrtZmAABrfFZrfHlrlXlrlbhrrplrrrhrrtaQOgCQ2/+RXyaRqampqXmpqam2ZgDbkDrb/////7b//9v///9kzjrmAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAKF0lEQVR4nO2da3vbNgyFtWVt2q7Z6mxNV7v1PEfdRb35//+6SbLiWBZJABQAQk9wPvhJdDnEeUvJujBsdXAlVZUuwLocECAHBMgBAXJAgBwQIAcEyAEBckCAHBAgNKDqJMlyhJURArVl51iftFBKmSHgjUa+5w3MLllR+SGgLYLGD/Y8xctrToj0+oTzchDNC5FaCzgvA9HcEIl1sHPvzh6JVbNDRFchyCP4FxZDiNgKrDPAv6w4QkSWU6zNEmIJEV5MszZKiCdEcCnV2iQhphChhXRrg4S4QgSW5VibI8QWwgGRAeVZGyPEF2KyJNfaFCHGEA6ICCjf2hAhzhAOiAYoZH1/W1XVqt60n9fdb88+GCcEhtjfdD/jQiAA1fXmat1+7l60pq33IgGdh7j/bd2SihFKAor0zaP3/qb33MQB2SAEhvjzrutR17gQTxFQr3cOKAno/hZ5EqoQ1v2praqGE1sKkAVCqBD17hXynxkHCNuDTAMa9aA/7pAhniigTfQAc0BdiO3r9iB7SwYUvQA9uw5qT/+2AWFCbLtzUf8rC6DJRegP8eO3/HAaRIjj6Tr6NT8OgepBeJkFlB2CGVD5Y4w7hAMCQjggIIQDAkL4SRoI4YAckAagzdkjyt2LxEVWcT7sIVD3Ytur9elBU38xin2gW0LMITCA+odL2+EWbP8m5msbUG4IDKDdy7vho+5v9BKPCuwCyg2BAbTtbnyH7tnf9EWP3vLnaPYQmGfS595He+QrkzLiDYEGNDwN6hV9I2AdUEYIDKDR4ds3FvG2cIRxh8C8We2/AM6ftG4jvdMEH+YQqFfP7bfj49Ebf2ViowMxh8CN7jhehHbjFrpL0NhDaSN8eEMwDn+x0oF4Q/gIMyAEHyA7HYg1BNsoV0t8OEP4OGkgBBcgWx2IMUQoV4a5NT58IYLByOb2+LCFCCcjmlvkwxUiEo1k3po0gkEz1ZBDBBX7tyeY9x7WCDVdQdQQIUUPDuwfDB+OfzDcNKYQDdUQQ4SUOHugzE8Gpgg9FkMLEVDq9ArzPyffmEE0qoQWYqr090/a/cK5MYGomZRBCjER9AUdd584N9Pa1NUEiyCEmAi+gglOvXMITb0Trk5RTbQCfIjJnpiGh9maetPjb8HdmiZeobwaoHlkiMlu2PYR0381UI2SQrUtNYcZVkW7kFDjNEBA00UPscQZ6GI7kisroMKn6eUAInkyCtd6SUDDxWKpHoS7Vi0OiFwDk5rH9sHt8OIHlFEEi4aG4ZaLAjptoX8dhG64LKDMMmZLrDIxQLqE5AqTA6RJSLAuQUB6hCTLkgSkRUi0KlFAOoRki5IFpEFIuCZhQPKEpEuSBiRNSLwicUCyhOQLkgckSUihHgVAcoQ0ytEAJEVIpRoVQDKEdIrRASRBSKkWJUD8hLRK0QLETUitEjVAvIT0CtEDxElIsQ5FQHyENMvQBMRFSLUKVUA8hHSL0AXEQUi5BmVAFhDbBmTgNGYcUPlLBeuAil+OmwdU+pbXPqDCj5UWAKjso1s5QN8//fSVVktU5V6PUEMQAH37WLEBKvYKkhyCdIh94QNU7jU/MUQxQMWG0iwGUKnhassBhI/N+jByQYCwwXkfZy8JEC468+P+RQHChOd+YSQJ6DM7IDg++ws1YgjahWL149/UeiABALj5kEOUuRdDe6o3OFF5QClTA4MeDACKuyo3F5QFQDFbE8OKTAAK+6o2FpUNQCFjIwP3jACaOis2lZQVQJfWei0BMgNo7K3WECg7gM7NtdpByBCgR3elZlCyBOjBXqcVpEwBOvqrNIKWLUBdAxptEGQMEGZigNlNkLZ2QICMAfJDDOHvJ2nI3r/mIXe/UITM/VYD8vabVcjaH3dAzv7ADDL2R66Qrz+0h2z9tQ/k6i8OIVN/9Qx5+uAF7eEvZMvSgPQHUC0LEMKwRJtnKgsI5Vek0ZOKAkLalWl1UBlA3z89/0pwa4YdeLQAQN8+Vm1egtl//Q5MWgCgw+HL868kr+bLkwP0L22Hf54aIOqQdMZB/osARO4Q5C4X1xIA0U8p1JNWqnHS1oX+LDwHEF/rFBWaWCALEF/zBBWamuIzFdBxB7b28SoyuQn5T25OOzAVQJBPjwPIJ1gC5FN0AfJJ3gD5NIGAfKJJQD5VKSCf7BaQT5cMyCfcBuRTtgPySf8B+X8bAQgLaM5/dG1kMF1eiBxA1LKI28tZ54RAH2LZgAT5zCGE3QV/DrLIJ58Qeg86IGJFtM3pojVgDpA4n1xC6B3IgGjlkLbOFO0lPzUF4TqIDkiFTxYh/PZUQKRaKBvPEaUhagrKlTTRWo0PnRBhczlAinxIjQkCOlCsVflQmiOeJ6QAKfMhNGgDkDoffJMmABXgg27UAqAifLDNygLCbUbx5BSqYeLNgMATxWJ8ROrjB1SQj0SB7ICK8hGoEA2oOomxdQElC0CGGO2C2qhVfVKqgeJ84iXgQ4x3g7c49z1vgFCcqkJFUEJc7AmtDxk/2GNKK6BJGaQQl/um18adA+5G+FwWQgtxqdRawPnS3QyfUSnEEBMl1sHOvXugqPI6FUMMMVV0FYL8iL8pPg/lUEMEFFuBdX7gb4zPsSBqiJAiyynWyR5aUiwhwotp1kYJ8YQILqVamyTEFCK0kG5tkBBXiMCyHGtzhNhCOCAyoDxrY4T4QkyW5FqbIsQYwgERAeVbGyLEGcIB0QDNsTZDiDUEAtD9bVVVq3rTfl7X+5vu5+UBGoVotX32IQdQhP3mat1+7l6s6v2v6+E3u4TAEK32N1FAFyEIgPY3q/qv1nb/y91yAXUhWr3/XQhQp93PMevFANquNlmAYme3EaDdq6i1CUKIEPs3dQLQOAQO0PA6cnX8OX4OMg3oMcT7NTeg0SG2qV4vEtApxO5tLQro/nbhgN49Hg80QNELrDGg+l3U2gAgZIisHgR4D5cQybM0cTiNgJAhUoDGUGDv84vQbfuRsLYL6PJKmhMQSVYBZYdwQEAIBwSEcEBACGZAZk/S2SEckAMyBag4H/YQqHuxQZvE/YsZQNwhCIC2V+vT7dhiAZFD4AHd365Sz7qXAYgeAg9o9/Ju+Iir/DmaPQTqmXSvbXc3DHRPA3y4QzggXkAPj1PCsnCEcYfAv3pGHL4m+DCHwAPqvwBSz5mMdCDmEITRHe23Y/roNcKHNwRl+AtwEWqlA/GG8BFmQAg+QHY6EGsItlGulvhwhvBx0kAILkC2OhBjiFCuDHNrfPhCBIORze3xYQsRTkY0t8iHK0QkGsncJh+mELFsBHOrfHhCRMNh/2D4QJgoRF0MIRLpUOZ2u89Rs0Ok8sH8TXefo+aGSAdMuy8AT6d5IaCIcfeF4Ok0JwQcMjj1zoEyiZMB5YdAxRxma+pNj78tis5RmSHQSTOm/7InqTnMnrIcECAHBMgBAXJAgBwQIAcEyAEBckCAHBAgBwTof4zCR1hhAB0kAAAAAElFTkSuQmCC" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>p_values <span class="ot">&lt;-</span> <span class="fu">runif</span>(m, <span class="dv">0</span>, alpha)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>test_results <span class="ot">&lt;-</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">graph_test_shortcut</span>(</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>    simple_successive_graph,</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">p =</span> p_values,</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> alpha</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>test_results<span class="sc">$</span>outputs<span class="sc">$</span>rejected</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    H1    H2    H3    H4 </span></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  TRUE FALSE FALSE FALSE</span></span></code></pre></div>
+<p>The above graph could be generalized to allow propagation between
+primary hypotheses <span class="citation">(Maurer, Glimm, and Bretz
+2011)</span>. A general successive graph is illustrate below with a
+variable to determine the propagation between <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_2\)</span>.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> <span class="fl">0.025</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="dv">4</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>successive_var <span class="ot">&lt;-</span> simple_successive_var <span class="ot">&lt;-</span> <span class="cf">function</span>(gamma) {</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">graph_create</span>(</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="dv">0</span>, <span class="dv">0</span>),</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rbind</span>(</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(<span class="dv">0</span>, gamma, <span class="dv">1</span> <span class="sc">-</span> gamma, <span class="dv">0</span>),</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(gamma, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span> <span class="sc">-</span> gamma),</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>),</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>)</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>successive_var_graph <span class="ot">&lt;-</span> <span class="fu">successive_var</span>(<span class="fl">0.5</span>)</span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(successive_var_graph, <span class="at">layout =</span> <span class="st">&quot;grid&quot;</span>, <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">vertex.size =</span> <span class="dv">70</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>p_values <span class="ot">&lt;-</span> <span class="fu">runif</span>(m, <span class="dv">0</span>, alpha)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>test_results <span class="ot">&lt;-</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">graph_test_shortcut</span>(</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    successive_var_graph,</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">p =</span> p_values,</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> alpha</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>test_results<span class="sc">$</span>outputs<span class="sc">$</span>rejected</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    H1    H2    H3    H4 </span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  TRUE  TRUE FALSE FALSE</span></span></code></pre></div>
+</div>
+</div>
+<div id="simes-based-procedures" class="section level1">
+<h1>Simes-based procedures</h1>
+<div id="hommel-procedure" class="section level2">
+<h2>Hommel procedure</h2>
+<p>Hommel procedure <span class="citation">(Hommel 1988)</span> is a
+closed test procedure which uses Simes tests for every intersection
+hypothesis. According to <span class="citation">Xi and Bretz
+(2019)</span>, the graph for Hommel procedures is the same as the graph
+for Holm procedures. Thus to perform Hommel procedure, we just need to
+specify <code>test_type</code> to be <code>simes</code>.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> <span class="fl">0.025</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>hommel_graph <span class="ot">&lt;-</span> <span class="fu">bonferroni_holm</span>(<span class="fu">rep</span>(<span class="dv">1</span> <span class="sc">/</span> m, m))</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  hommel_graph,</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">layout =</span> igraph<span class="sc">::</span><span class="fu">layout_in_circle</span>(</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_igraph</span>(hommel_graph),</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">order =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">3</span>)</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">vertex.size =</span> <span class="dv">70</span></span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>p_values <span class="ot">&lt;-</span> <span class="fu">runif</span>(m, <span class="dv">0</span>, alpha)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>test_results <span class="ot">&lt;-</span> <span class="fu">graph_test_closure</span>(</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  hommel_graph,</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">p =</span> p_values,</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">alpha =</span> alpha,</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">test_types =</span> <span class="st">&quot;simes&quot;</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>test_results<span class="sc">$</span>outputs<span class="sc">$</span>rejected</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   H1   H2   H3 </span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; TRUE TRUE TRUE</span></span></code></pre></div>
+</div>
+</div>
+<div id="parametric-procedures" class="section level1">
+<h1>Parametric procedures</h1>
+<div id="dunnett-procedure" class="section level2">
+<h2>Dunnett procedure</h2>
+<p>Step-down Dunnett procedures are a closed test procedure and an
+improvement from Holm procedures by incorporating the correlation
+structure between test statistics <span class="citation">(Dunnett and
+Tamhane 1991)</span>. Thus they are the same graph as Holm procedures.
+Assume an equi-correlated case, where the correlation between any pair
+of test statistics is the same, e.g., 0.5. Then we can perform the
+step-down Dunnett procedure by specifying <code>test_type</code> to be
+<code>parametric</code> and providing the correlation matrix.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> <span class="fl">0.025</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>dunnett_graph <span class="ot">&lt;-</span> <span class="fu">bonferroni_holm</span>(<span class="fu">rep</span>(<span class="dv">1</span> <span class="sc">/</span> m, m))</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  dunnett_graph,</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">layout =</span> igraph<span class="sc">::</span><span class="fu">layout_in_circle</span>(</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_igraph</span>(dunnett_graph),</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">order =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">3</span>)</span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">vertex.size =</span> <span class="dv">70</span></span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>p_values <span class="ot">&lt;-</span> <span class="fu">runif</span>(m, <span class="dv">0</span>, alpha)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>corr <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fl">0.5</span>, m, m)</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="fu">diag</span>(corr) <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>test_results <span class="ot">&lt;-</span> <span class="fu">graph_test_closure</span>(</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  dunnett_graph,</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">p =</span> p_values, <span class="at">alpha =</span> alpha,</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">test_types =</span> <span class="st">&quot;parametric&quot;</span>,</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">test_corr =</span> <span class="fu">list</span>(corr)</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>test_results<span class="sc">$</span>outputs<span class="sc">$</span>rejected</span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    H1    H2    H3 </span></span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  TRUE FALSE FALSE</span></span></code></pre></div>
+</div>
+</div>
+<div id="reference" class="section level1 unnumbered">
+<h1 class="unnumbered">Reference</h1>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-bretz-2009-graphical" class="csl-entry">
+Bretz, Frank, Willi Maurer, Werner Branath, and Martin Posch. 2009.
+<span>“A Graphical Approach to Sequentially Rejective Multiple Test
+Procedures.”</span> <em>Statistics in Medicine</em> 53 (4): 586–604. <a href="https://onlinelibrary.wiley.com/doi/abs/10.1002/sim.3495">https://onlinelibrary.wiley.com/doi/abs/10.1002/sim.3495</a>.
+</div>
+<div id="ref-dmitrienko-2003-gatekeeping" class="csl-entry">
+Dmitrienko, Alexei, Walter W. Offen, and Peter H. Westfall. 2003.
+<span>“Gatekeeping Strategies for Clinical Trials That Do Not Require
+All Primary Effects to Be Significant.”</span> <em>Statistics in
+Medicine</em> 22 (15): 2387–2400. <a href="https://onlinelibrary.wiley.com/doi/pdf/10.1002/sim.1526">https://onlinelibrary.wiley.com/doi/pdf/10.1002/sim.1526</a>.
+</div>
+<div id="ref-dunnett-1991-stepdown" class="csl-entry">
+Dunnett, Charles W., and Ajit C. Tamhane. 1991. <span>“Step-down
+Multiple Tests for Comparing Treatments with a Control in Unbalanced
+One-Way Layouts.”</span> <em>Statistics in Medicine</em> 10 (6): 939–47.
+<a href="https://onlinelibrary.wiley.com/doi/10.1002/sim.4780100614">https://onlinelibrary.wiley.com/doi/10.1002/sim.4780100614</a>.
+</div>
+<div id="ref-holm-1979-simple" class="csl-entry">
+Holm, Sture. 1979. <span>“A Simple Sequentially Rejective Multiple Test
+Procedure.”</span> <em>Scandinavian Journal of Statistics</em> 75:
+65–70. <a href="http://www.jstor.org/stable/4615733">http://www.jstor.org/stable/4615733</a>.
+</div>
+<div id="ref-hommel-1988-stagewise" class="csl-entry">
+Hommel, Gerhard. 1988. <span>“A Stagewise Rejective Multiple Test
+Procedure Based on a Modified Bonferroni Test.”</span>
+<em>Biometrika</em> 75 (2): 383–86. <a href="https://doi.org/10.1093/biomet/75.2.383">https://doi.org/10.1093/biomet/75.2.383</a>.
+</div>
+<div id="ref-maurer-2011-multiple" class="csl-entry">
+Maurer, Willi, Ekkehard Glimm, and Frank Bretz. 2011. <span>“Multiple
+and Repeated Testing of Primary, Coprimary, and Secondary
+Hypotheses.”</span> <em>Statistics in Biopharmaceutical Research</em> 3
+(2): 336–52. <a href="https://www.tandfonline.com/doi/abs/10.1198/sbr.2010.10010">https://www.tandfonline.com/doi/abs/10.1198/sbr.2010.10010</a>.
+</div>
+<div id="ref-maurer-1995-multiple" class="csl-entry">
+Maurer, Willi, Ludwig Hothorn, and Walter Lehmacher. 1995.
+<span>“Multiple Comparisons in Drug Clinical Trials and Preclinical
+Assays: A-Priori Ordered Hypotheses.”</span> <em>Biometrie in Der
+Chemisch-Pharmazeutischen Industrie</em> 6: 3–18.
+</div>
+<div id="ref-wiens-2003-fixed" class="csl-entry">
+Wiens, Brian L. 2003. <span>“A Fixed Sequence Bonferroni Procedure for
+Testing Multiple Endpoints.”</span> <em>Pharmaceutical Statistics</em> 2
+(3): 211–15. <a href="https://onlinelibrary.wiley.com/doi/10.1002/pst.64">https://onlinelibrary.wiley.com/doi/10.1002/pst.64</a>.
+</div>
+<div id="ref-wiens-2005-fallback" class="csl-entry">
+Wiens, Brian L., and Alexei Dmitrienko. 2005. <span>“The Fallback
+Procedure for Evaluating a Aingle Family of Hypotheses.”</span>
+<em>Journal of Biopharmaceutical Statistics</em> 15 (6): 929–42. <a href="https://www.tandfonline.com/doi/full/10.1080/10543400500265660">https://www.tandfonline.com/doi/full/10.1080/10543400500265660</a>.
+</div>
+<div id="ref-xi-2019-symmetric" class="csl-entry">
+Xi, Dong, and Frank Bretz. 2019. <span>“Symmetric Graphs for Equally
+Weighted Tests, with Application to the Hochberg Procedure.”</span>
+<em>Statistics in Medicine</em> 38 (27): 5268–82. <a href="https://onlinelibrary.wiley.com/doi/10.1002/sim.8375">https://onlinelibrary.wiley.com/doi/10.1002/sim.8375</a>.
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Rationales to generate the closure and the weighting strategy of a graph</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+<style type="text/css">detaiks.chunk-details > summary.chunk-summary {
+text-align: right;
+}
+details.chunk-details[open] > summary.chunk-summary::after {
+content: "Hide";
+}
+details.chunk-details[open] > summary.chunk-summary > span.chunk-summary-text {
+display: none;
+}
+</style>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+
+
+
+<style type="text/css">
+/* for pandoc --citeproc since 2.11 */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Rationales to generate the closure and the
+weighting strategy of a graph</h1>
+
+
+
+<div id="motivating-example" class="section level1">
+<h1>Motivating example</h1>
+<p>Consider a simple successive graph with four hypotheses. It has two
+primary hypotheses <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_2\)</span> and two secondary hypotheses <span class="math inline">\(H_3\)</span> and <span class="math inline">\(H_4\)</span>. Initially, hypothesis weights are
+split equally between <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_2\)</span> with 0.5. Hypotheses <span class="math inline">\(H_3\)</span> and <span class="math inline">\(H_4\)</span> receive 0 hypothesis weights because
+<span class="math inline">\(H_3 (H_4)\)</span> is tested only if <span class="math inline">\(H_1 (H_2)\)</span> is rejected. Thus there is an
+edge from <span class="math inline">\(H_1 (H_2)\)</span> to <span class="math inline">\(H_3 (H_4)\)</span> with a transition weight of 1.
+When both <span class="math inline">\(H_1\)</span> and <span class="math inline">\(H_3\)</span> are rejected, their hypothesis
+weights are propagated to <span class="math inline">\(H_2\)</span>;
+similarly, when both <span class="math inline">\(H_2\)</span> and <span class="math inline">\(H_4\)</span> are rejected, their hypothesis
+weights are propagated to <span class="math inline">\(H_1\)</span>. Thus
+there is an edge from <span class="math inline">\(H_3 (H_4)\)</span> to
+<span class="math inline">\(H_2 (H_1)\)</span> with a transition weight
+of 1. A graphical multiple comparison procedure is illustrated
+below.</p>
+<p><img src="data:image/png;base64,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" style="display: block; margin: auto;" /></p>
+</div>
+<div id="generating-the-closure" class="section level1">
+<h1>Generating the closure</h1>
+<p>The closure of this multiple comparison procedure is a collection of
+intersection hypotheses <span class="math inline">\(H_1\cap H_2\cap
+H_3\cap H_4\)</span>, <span class="math inline">\(H_1\cap H_2\cap
+H_3\)</span>, <span class="math inline">\(H_1\cap H_2\cap H_4\)</span>,
+<span class="math inline">\(H_1\cap H_3\cap H_4\)</span>, <span class="math inline">\(H_2\cap H_3\cap H_4\ \ldots, H_1, H_2,
+H_3\)</span>, and <span class="math inline">\(H_4\)</span>. In other
+words, these intersection hypotheses consist of intersections based on
+all non-empty subsets of <span class="math inline">\(\{1, 2, 3,
+4\}\)</span>, e.g., <span class="math inline">\(\{1, 2, 3\}\)</span>,
+<span class="math inline">\(\{1, 2, 4\}\)</span>, <span class="math inline">\(\{1, 3, 4\}\)</span>, <span class="math inline">\(\{2, 3, 4\}\)</span>, <span class="math inline">\(\ldots\)</span>. Thus there are <span class="math inline">\(2^4-1\)</span> intersection hypotheses. An
+equivalent way to generate all intersection hypotheses is to use a
+binary representation. For example, the intersection hypothesis <span class="math inline">\(H_1\cap H_2\cap H_3\cap H_4\)</span> corresponds
+to <span class="math inline">\((1, 1, 1, 1)\)</span> and <span class="math inline">\(H_1\cap H_2\cap H_3\)</span> corresponds to <span class="math inline">\((1, 1, 1, 0)\)</span>. Then the closure can be
+indexed by the power set of <span class="math inline">\(\{1, 2, 3,
+4\}\)</span> as below. In general, one can use
+<code>rev(expand.grid(rep(list(1:0), m)))</code> to general the closure,
+where <span class="math inline">\(m\)</span> is the number of
+hypotheses.</p>
+<pre><code>#&gt;    H1 H2 H3 H4
+#&gt; 1   1  1  1  1
+#&gt; 2   1  1  1  0
+#&gt; 3   1  1  0  1
+#&gt; 4   1  1  0  0
+#&gt; 5   1  0  1  1
+#&gt; 6   1  0  1  0
+#&gt; 7   1  0  0  1
+#&gt; 8   1  0  0  0
+#&gt; 9   0  1  1  1
+#&gt; 10  0  1  1  0
+#&gt; 11  0  1  0  1
+#&gt; 12  0  1  0  0
+#&gt; 13  0  0  1  1
+#&gt; 14  0  0  1  0
+#&gt; 15  0  0  0  1</code></pre>
+<div id="calculating-the-weighting-strategy" class="section level2">
+<h2>Calculating the weighting strategy</h2>
+<p>Given the closure, one can calculate the hypothesis weight associated
+with every hypothesis in every intersection hypothesis using Algorithm 1
+<span class="citation">(Bretz et al. 2011)</span>. The whole collection
+of hypothesis weights is called a weighting strategy. For example,
+hypothesis weights are <span class="math inline">\((0.5, 0.5, 0,
+0)\)</span> for the intersection hypothesis <span class="math inline">\(H_1\cap H_2 \cap H_3\cap H_4\)</span>. Then
+hypothesis weights for the intersection hypothesis <span class="math inline">\(H_1\cap H_2 \cap H_3\)</span> are <span class="math inline">\((0.5, 0.5, 0, 0)\)</span>, which can be calculated
+by removing <span class="math inline">\(H_4\)</span> from the initial
+graph and applying Algorithm 1 <span class="citation">(Bretz et al.
+2011)</span>. The algorithm calculates hypothesis weights in a
+step-by-step fashion. For example, for the intersection hypothesis <span class="math inline">\(H_1\cap H_2\)</span>, it can start from <span class="math inline">\(H_1\cap H_2 \cap H_3\cap H_4\)</span> and
+calculates hypothesis weights for <span class="math inline">\(H_1\cap
+H_2 \cap H_3\)</span> by removing <span class="math inline">\(H_4\)</span> and then calculates hypothesis
+weights for <span class="math inline">\(H_1\cap H_2\)</span> by removing
+<span class="math inline">\(H_3\)</span>; it can also start from <span class="math inline">\(H_1\cap H_2 \cap H_3\)</span> (assuming its
+hypotheses weights are stored) and calculates hypothesis weights for
+<span class="math inline">\(H_1\cap H_2\)</span> by removing <span class="math inline">\(H_3\)</span>. Therefore, there are two strategies
+to calculate the weighting strategy.</p>
+<pre><code>#&gt;      H1   H2   H3   H4
+#&gt; 1  0.50 0.50 0.00 0.00
+#&gt; 2  0.50 0.50 0.00 0.00
+#&gt; 3  0.50 0.50 0.00 0.00
+#&gt; 4  0.50 0.50 0.00 0.00
+#&gt; 5  0.75 0.00 0.00 0.25
+#&gt; 6  1.00 0.00 0.00 0.00
+#&gt; 7  0.75 0.00 0.00 0.25
+#&gt; 8  1.00 0.00 0.00 0.00
+#&gt; 9  0.00 0.75 0.25 0.00
+#&gt; 10 0.00 0.75 0.25 0.00
+#&gt; 11 0.00 1.00 0.00 0.00
+#&gt; 12 0.00 1.00 0.00 0.00
+#&gt; 13 0.00 0.00 0.50 0.50
+#&gt; 14 0.00 0.00 1.00 0.00
+#&gt; 15 0.00 0.00 0.00 1.00</code></pre>
+<div id="approach-1-simple-approach" class="section level3">
+<h3>Approach 1: Simple approach</h3>
+<p>The first strategy utilizes the initial graph as the starting point
+and calculates hypothesis weights for all other intersection hypotheses.
+For example, to calculate hypothesis weights for <span class="math inline">\(H_1\cap H_2\)</span>, it will start with the
+intersection hypothesis <span class="math inline">\(H_1\cap H_2 \cap
+H_3\cap H_4\)</span> and sequentially remove <span class="math inline">\(H_4\)</span> and <span class="math inline">\(H_3\)</span> (or in the other order). This
+approach is simple to implement since hypothesis weights for <span class="math inline">\(H_1\cap H_2 \cap H_3\cap H_4\)</span> are
+determined by the initial graph and always available. This approach is
+similar to the one implemented in the <code>gMCP</code> R package. The
+drawback is that it does not use other information to reduce the number
+of calculations. For example, it is possible that hypothesis weights for
+<span class="math inline">\(H_1\cap H_2 \cap H_3\)</span> have been
+calculated when calculating for <span class="math inline">\(H_1\cap
+H_2\)</span>. Using the information from <span class="math inline">\(H_1\cap H_2 \cap H_3\)</span> would only need the
+one-step calculation, compared to the two-step calculation using <span class="math inline">\(H_1\cap H_2 \cap H_3\cap H_4\)</span>.</p>
+</div>
+<div id="approach-2-parent-child-approach" class="section level3">
+<h3>Approach 2: Parent-child approach</h3>
+<p>This approach tries to avoid the drawback of Approach 1 by saving
+intermediate graphs. Then it only performs one-step calculation which
+could save time. In general, an intersection hypothesis has a parent
+intersection hypothesis, which involves all hypotheses involved in the
+first intersection and has one extra hypothesis. For example, the second
+row of <code>matrix_intersections</code> is <span class="math inline">\(H_1\cap H_2 \cap H_3\)</span> and its parent
+intersection is <span class="math inline">\(H_1\cap H_2 \cap H_3\cap
+H_4\)</span> in the first row; the third row of
+<code>matrix_intersections</code> is <span class="math inline">\(H_1\cap
+H_2 \cap H_4\)</span> and its parent intersection is <span class="math inline">\(H_1\cap H_2 \cap H_3\cap H_4\)</span> in the first
+row. Thus we can identify the parent intersection hypothesis for each
+row in <code>matrix_intersections</code> (except row 1) as the row
+number 1, 1, 2, 1, 2, 3, 4, 1, 2, 3, 4, 5, 6, 7. Given this sequence of
+parent hypotheses, it is simple to obtain hypothesis weights for an
+intersection hypothesis based on its parent intersection hypothesis via
+one-step calculation.</p>
+<p>It is of interest to understand this pattern and obtain it
+efficiently. First, between the bottom half (rows 9 - 15) and top half
+(rows 1 - 7), each row’s parent in the bottom half is the corresponding
+row in the top half, eight rows up, because the only difference is the
+flipping of <span class="math inline">\(H_1\)</span> from 1 in the top
+half to 0 in the bottom half. For example, row 15’s parent is in row 15
+- 8 = 7. Using this observation, we can determine parent hypotheses for
+rows from 9 to 15 as 1, 2, 3, 4, 5, 6, 7. A similar pattern can be
+observed for rows from 5 to 8. Their parent hypotheses are in rows 1, 2,
+3, 4, respectively, by flipping <span class="math inline">\(H_2\)</span>
+from 1 to 0. For rows 3 - 4, their parent hypotheses are in rows 1, 2,
+respectively, by flipping <span class="math inline">\(H_3\)</span> from
+1 to 0. Lastly for row 2, its parent hypothesis is in row 1. The row
+number of the parent hypothesis can be efficiently generated by running
+<code>do.call(c, lapply(2^(seq_len(m) - 1), seq_len))[-2^m, ]</code>,
+where <span class="math inline">\(m\)</span> is the number of
+hypotheses.</p>
+</div>
+</div>
+<div id="comparing-different-approaches-to-calculating-weighting-strategies" class="section level2">
+<h2>Comparing different approaches to calculating weighting
+strategies</h2>
+<p>To benchmark against existing approaches to calculating weighting
+strategies, we compare the following approaches:
+<code>gMCP::generateWeights()</code> <span class="citation">(Rohmeyer
+and Klinglmueller 2024)</span>, <code>lrstat::fwgtmat()</code> <span class="citation">(Lu 2016)</span>, Approach 1 (graphicalMCP simple) and
+Approach 2 (graphicalMCP parent-child). Random graphs are generated for
+the numbers of hypotheses of 4, 8, 12, and 16. Computing time (in median
+log-10 milliseconds) is plotted below. We can see that
+<code>gMCP::generateWeights()</code> is the slowest and
+<code>lrstat::fwgtmat()</code> is the fastest. Approach 2 (graphicalMCP
+parent-child) is faster than Approach 1 (graphicalMCP simple). Note that
+<code>lrstat::fwgtmat()</code> implements the calculation using C++,
+which is known to be faster than R. But it is less stable than other
+approaches, e.g., giving errors more often than others. Given that the
+computing time of R-based approaches is acceptable, adding Rcpp
+dependency is not considered in <code>graphicalMCP</code>. For these
+considerations, we implement Approach 2 in
+<code>graphicalMCP::graph_generate_weights()</code>.</p>
+<p><img src="data:image/png;base64,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" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="improving-power-simulations-using-parent-child-relationships" class="section level1">
+<h1>Improving power simulations using parent-child relationships</h1>
+<div id="conventional-approach-for-power-simulations" class="section level2">
+<h2>Conventional approach for power simulations</h2>
+<p>The conventional approach for power simulations is to repeat the
+following process many times, e.g., 100,000 times.</p>
+<ol style="list-style-type: decimal">
+<li>Simulate a set of p-values</li>
+<li>Run the graphical multiple comparison procedure to
+<ul>
+<li>Determine which hypothesis can be rejected</li>
+<li>Remove the rejected hypothesis and update the graph</li>
+<li>Repeat until no more hypotheses can be rejected</li>
+</ul></li>
+</ol>
+<p>Note that the same step to update the graph may repeat in many
+replications, which may be repetitive. For <span class="math inline">\(m\)</span> hypotheses, there are at most <span class="math inline">\(2^m-1\)</span> graphs depending on which
+hypotheses are rejected. These graphs correspond to the closure and the
+weighting strategy. Thus an idea to avoid redundant updating of graphs
+is to utilize the weighting strategy.</p>
+</div>
+<div id="power-simulations-using-parent-child-relationships" class="section level2">
+<h2>Power simulations using parent-child relationships</h2>
+<p>The key to allow this approach is to efficiently identify the row of
+the weighting strategy, given which hypotheses are rejected. Remembering
+the pattern we found for Approach 2, the bottom half (rows 9 - 15) of
+<code>matrix_intersections</code> is the same as the top half (rows 1 -
+7), except flipping <span class="math inline">\(H_1\)</span> from 1 to
+0. This means that if <span class="math inline">\(H_1\)</span> has not
+been rejected (1 for <span class="math inline">\(H_1\)</span> in
+<code>matrix_intersections</code>), the row number of that index should
+be in the top half. For example, assume that <span class="math inline">\(H_2\)</span> and <span class="math inline">\(H_4\)</span> have been rejected and the index in
+<code>matrix_intersections</code> should be <span class="math inline">\((1, 0, 1, 0)\)</span>. Since <span class="math inline">\(H_1\)</span> is 1, the corresponding row should be
+in the top half (rows 1- 7). But <span class="math inline">\(H_2\)</span> is 0 and thus the corresponding row
+should be in the bottom half within the top half (rows 5 - 7). Since
+<span class="math inline">\(H_3\)</span> is 1 and thus the corresponding
+row should be in the top half (rows 5 - 6). But <span class="math inline">\(H_4\)</span> is 0 and thus the corresponding row
+should be 6. A useful way to calculate the row number for an index of
+XXXX is <code>2^m - sum(XXXX * 2^(m:1 - 1))</code>. For example for
+XXXX=1010, its row number should be
+<code>(1 - 1) * 8 + (1 - 0) * 4 + (1 - 1) * 2 + (1 - 0) * 1 + 1 = 16 - 10 = 6</code>.</p>
+<p>With the above way of efficiently identifying rows of
+<code>weighting_strategy</code>, power simulations could be implemented
+as follows:</p>
+<ol style="list-style-type: decimal">
+<li>Obtain the weighting strategy (once for all simulations)</li>
+<li>Simulate a set of p-values</li>
+<li>Run the graphical multiple comparison procedure to
+<ul>
+<li>Determine which hypothesis can be rejected</li>
+<li>Remove the rejected hypothesis and identify the row of the weighting
+strategy</li>
+<li>Repeat until no more hypotheses can be rejected</li>
+</ul></li>
+</ol>
+<p>The small modification in Step 3b makes this approach much faster
+than the conventional approach for power simulations.</p>
+</div>
+<div id="comparing-different-approaches-to-power-simulations" class="section level2">
+<h2>Comparing different approaches to power simulations</h2>
+<p>To benchmark against existing approaches to calculating weighting
+strategies, we compare the following approaches:
+<code>gMCP::calcPower()</code>, Approach 1 (graphicalMCP conventional),
+and Approach 2 (graphicalMCP parent-child). Both Holm and fixed sequence
+procedures are considered with the numbers of hypotheses of 4, 8, 12,
+and 16. Computing time (in median log-10 seconds) is plotted below. We
+can see that <code>gMCP::calcPower()</code> is the fastest and Approach
+1 (graphicalMCP conventional) is the lowest. Note that
+<code>gMCP::calcPower()</code> implements the simulation using C, which
+is known to be faster than R but is not easy to extend to other
+situations. Given that the computing time of Approach 2 (graphicalMCP
+parent-child) is acceptable, we implement it in
+<code>graphicalMCP::graph_calculate_power()</code>.</p>
+<p><img src="data:image/png;base64,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" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="reference" class="section level1 unnumbered">
+<h1 class="unnumbered">Reference</h1>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-bretz-2011-graphical" class="csl-entry">
+Bretz, Frank, Martin Posch, Ekkehard Glimm, Florian Klinglmueller, Willi
+Maurer, and Kornelius Rohmeyer. 2011. <span>“Graphical Approaches for
+Multiple Comparison Procedures Using Weighted Bonferroni, Simes, or
+Parametric Tests.”</span> <em>Biometrical Journal</em> 53 (6): 894–913.
+<a href="https://onlinelibrary.wiley.com/doi/10.1002/bimj.201000239">https://onlinelibrary.wiley.com/doi/10.1002/bimj.201000239</a>.
+</div>
+<div id="ref-lu-2016-graphical" class="csl-entry">
+Lu, Kaifeng. 2016. <span>“Graphical Approaches Using a Bonferroni
+Mixture of Weighted Simes Tests.”</span> <em>Statistics in Medicine</em>
+35 (22): 4041–55. <a href="https://onlinelibrary.wiley.com/doi/10.1002/sim.6985">https://onlinelibrary.wiley.com/doi/10.1002/sim.6985</a>.
+</div>
+<div id="ref-rohmeyer-2024-gmcp" class="csl-entry">
+Rohmeyer, Kornelius, and Florian Klinglmueller. 2024. <em><span class="nocase">gMCP</span>: Graph Based Multiple Test Procedures</em>.
+<a href="https://cran.r-project.org/package=gMCP">https://cran.r-project.org/package=gMCP</a>.
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

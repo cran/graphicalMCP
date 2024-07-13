@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Get started</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">
+/* for pandoc --citeproc since 2.11 */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Get started</h1>
+
+
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>Graphical approaches for multiple comparison procedures (MCPs) are a
+general framework to control the familywise error rate strongly as a
+pre-specified significance level <span class="math inline">\(0&lt;\alpha&lt;1\)</span>. This approach includes
+many commonly used MCPs as special cases and is transparent in
+visualizing MCPs for better communications. <code>graphicalMCP</code> is
+designed to design and analyze graphical MCPs in a flexible, informative
+and efficient way.</p>
+</div>
+<div id="basic-usage" class="section level1">
+<h1>Basic usage</h1>
+<div id="initial-graph" class="section level2">
+<h2>Initial graph</h2>
+<p>The base object in <code>graphicalMCP</code> is an
+<code>initial_graph</code>, which consists of a vector of hypothesis
+weights and a matrix of transition weights <span class="citation">(Bretz
+et al. 2009)</span>. This object can be created via
+<code>graph_create()</code>. In the graphical representation, hypotheses
+are denoted as nodes (or vertices) associated with hypothesis weights. A
+directed edge from a hypothesis to another indicates the direction of
+propagation of the hypothesis weight from the origin hypothesis to the
+end hypothesis. The edge is weighted by a transition weight indicating
+the proportion of propagation.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(graphicalMCP)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># A graph of two primary hypotheses (H1 and H2) and two secondary hypotheses (H3 and H4)</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>hypotheses <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="dv">0</span>, <span class="dv">0</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>transitions <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>),</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>),</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>),</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>hyp_names <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;H1&quot;</span>, <span class="st">&quot;H2&quot;</span>, <span class="st">&quot;H3&quot;</span>, <span class="st">&quot;H4&quot;</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>example_graph <span class="ot">&lt;-</span> <span class="fu">graph_create</span>(hypotheses, transitions, hyp_names)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>example_graph</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Initial graph</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; --- Hypothesis weights ---</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; H1: 0.5</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; H2: 0.5</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; H3: 0.0</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; H4: 0.0</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; --- Transition weights ---</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     H1 H2 H3 H4</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  H1  0  0  1  0</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  H2  0  0  0  1</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  H3  0  1  0  0</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  H4  1  0  0  0</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(example_graph, <span class="at">vertex.size =</span> <span class="dv">60</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" style="display: block; margin: auto;" /></p>
+</div>
+<div id="update-graph" class="section level2">
+<h2>Update graph</h2>
+<p>When a hypothesis is removed from the graph, hypothesis and
+transition weights of remaining hypotheses should be updated according
+to Algorithm 1 in <span class="citation">Bretz et al. (2011)</span>. For
+example, assume that hypotheses H1, H2 and H4 are removed from the
+graph. The updated graph after removing three hypotheses is below.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>updated_example <span class="ot">&lt;-</span> <span class="fu">graph_update</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  example_graph,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">delete =</span> <span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">TRUE</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>updated_example</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Initial and final graphs -------------------------------------------------------</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Initial graph</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; --- Hypothesis weights ---</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; H1: 0.5</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; H2: 0.5</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; H3: 0.0</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; H4: 0.0</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; --- Transition weights ---</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     H1 H2 H3 H4</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  H1  0  0  1  0</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  H2  0  0  0  1</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  H3  0  1  0  0</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  H4  1  0  0  0</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Updated graph after deleting hypotheses 1, 2, 4</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; --- Hypothesis weights ---</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; H1: NA</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; H2: NA</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; H3:  1</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; H4: NA</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; --- Transition weights ---</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     H1 H2 H3 H4</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  H1 NA NA NA NA</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  H2 NA NA NA NA</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  H3 NA NA  0 NA</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  H4 NA NA NA NA</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(updated_example, <span class="at">vertex.size =</span> <span class="dv">60</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="perform-graphical-mcps" class="section level1">
+<h1>Perform graphical MCPs</h1>
+<p>Given the set of p-values of all hypotheses, graphical MCPs can be
+performed using <code>graph_test_shortcut()</code> to determine which
+hypotheses can be rejected at the significance level <code>alpha</code>.
+Assume p-values are 0.01, 0.005, 0.03, and 0.01 for hypotheses H1-H4.
+With a one-sided significance level <code>alpha = 0.025</code>, rejected
+hypotheses are H1, H2, and H4. More details about the shortcut testing
+can be found in <code>vignette(&quot;shortcut-testing&quot;)</code>.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>test_results <span class="ot">&lt;-</span> <span class="fu">graph_test_shortcut</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  example_graph,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">p =</span> <span class="fu">c</span>(<span class="fl">0.01</span>, <span class="fl">0.005</span>, <span class="fl">0.03</span>, <span class="fl">0.01</span>),</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">alpha =</span> <span class="fl">0.025</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>test_results<span class="sc">$</span>outputs<span class="sc">$</span>rejected</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    H1    H2    H3    H4 </span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  TRUE  TRUE FALSE  TRUE</span></span></code></pre></div>
+<p>A similar testing procedure can be performed using the closure
+principle. This will allow more tests for intersection hypotheses, e.g.,
+Simes, parametric and a mixture of them. If the test type is Bonferroni,
+the resulting closed procedure is equivalent to the shortcut procedure
+above. Additional details about closed testing can be found in
+<code>vignette(&quot;closed-testing&quot;)</code>.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>test_results_closed <span class="ot">&lt;-</span> <span class="fu">graph_test_closure</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  example_graph,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">p =</span> <span class="fu">c</span>(<span class="fl">0.01</span>, <span class="fl">0.005</span>, <span class="fl">0.03</span>, <span class="fl">0.01</span>),</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">alpha =</span> <span class="fl">0.025</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">test_types =</span> <span class="st">&quot;bonferroni&quot;</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">test_groups =</span> <span class="fu">list</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>test_results_closed<span class="sc">$</span>outputs<span class="sc">$</span>rejected</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    H1    H2    H3    H4 </span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  TRUE  TRUE FALSE  TRUE</span></span></code></pre></div>
+</div>
+<div id="power-simulations" class="section level1">
+<h1>Power simulations</h1>
+<p>With multiplicity adjustment, such as graphical MCPs, the “power” to
+reject each hypothesis will be affected, compared to its marginal power.
+The latter is the power to rejected a hypothesis at the significance
+level <code>alpha</code> without multiplicity adjustment. The marginal
+power is usually obtained from other pieces of statistical software.
+<code>graph_calculate_power()</code> performs power simulations to
+assess the power after adjusting for the graphical MCP <span class="citation">(Bretz, Maurer, and Hommel 2011)</span>. Assume that
+the marginal power to reject H1-H4 is 90%, 90%, 80%, and 80% and all
+test statistics are independent of each other. The local power after the
+multiplicity adjustment is 87.7%, 87.7%, 67.2%, and 67.2% respectively
+for H1-H4. Additional details about power simulations can be found in
+<code>vignette(&quot;shortcut-testing&quot;)</code> and
+<code>vignette(&quot;closed-testing&quot;)</code>.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>power_results <span class="ot">&lt;-</span> <span class="fu">graph_calculate_power</span>(</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  example_graph,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">sim_n =</span> <span class="fl">1e6</span>,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">power_marginal =</span> <span class="fu">c</span>(<span class="fl">0.9</span>, <span class="fl">0.9</span>, <span class="fl">0.8</span>, <span class="fl">0.8</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>power_results<span class="sc">$</span>power<span class="sc">$</span>power_local</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       H1       H2       H3       H4 </span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 0.875760 0.876295 0.670470 0.671431</span></span></code></pre></div>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1 class="unnumbered">References</h1>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-bretz-2009-graphical" class="csl-entry">
+Bretz, Frank, Willi Maurer, Werner Branath, and Martin Posch. 2009.
+<span>“A Graphical Approach to Sequentially Rejective Multiple Test
+Procedures.”</span> <em>Statistics in Medicine</em> 53 (4): 586–604. <a href="https://onlinelibrary.wiley.com/doi/abs/10.1002/sim.3495">https://onlinelibrary.wiley.com/doi/abs/10.1002/sim.3495</a>.
+</div>
+<div id="ref-bretz-2011-test" class="csl-entry">
+Bretz, Frank, Willi Maurer, and Gerhard Hommel. 2011. <span>“Test and
+Power Considerations for Multiple Endpoint Analyses Using Sequentially
+Rejective Graphical Procedures.”</span> <em>Statistics in Medicine</em>
+30 (13): 1489–1501. <a href="https://onlinelibrary.wiley.com/doi/abs/10.1002/sim.3988">https://onlinelibrary.wiley.com/doi/abs/10.1002/sim.3988</a>.
+</div>
+<div id="ref-bretz-2011-graphical" class="csl-entry">
+Bretz, Frank, Martin Posch, Ekkehard Glimm, Florian Klinglmueller, Willi
+Maurer, and Kornelius Rohmeyer. 2011. <span>“Graphical Approaches for
+Multiple Comparison Procedures Using Weighted Bonferroni, Simes, or
+Parametric Tests.”</span> <em>Biometrical Journal</em> 53 (6): 894–913.
+<a href="https://onlinelibrary.wiley.com/doi/10.1002/bimj.201000239">https://onlinelibrary.wiley.com/doi/10.1002/bimj.201000239</a>.
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

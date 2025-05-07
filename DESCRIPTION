@@ -1,7 +1,7 @@
 Type: Package
 Package: graphicalMCP
 Title: Graphical Multiple Comparison Procedures
-Version: 0.2.6
+Version: 0.2.8
 Authors@R: c(
     person("Dong", "Xi", , "dong.xi1@gilead.com", role = c("aut", "cre")),
     person("Ethan", "Brockmann", , "ethan.brockmann@atorusresearch.com", role = "aut"),
@@ -25,12 +25,13 @@ Suggests: bench, dplyr, forcats, ggplot2, gMCP, gt, here, htmltools,
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 Encoding: UTF-8
-RoxygenNote: 7.3.0
+RoxygenNote: 7.3.2
+Language: en-US
 NeedsCompilation: no
-Packaged: 2024-11-08 20:35:41 UTC; dxi1
+Packaged: 2025-05-07 03:10:25 UTC; dxi1
 Author: Dong Xi [aut, cre],
   Ethan Brockmann [aut],
   Gilead Sciences, Inc. [cph, fnd]
 Maintainer: Dong Xi <dong.xi1@gilead.com>
 Repository: CRAN
-Date/Publication: 2024-11-08 21:00:02 UTC
+Date/Publication: 2025-05-07 03:30:01 UTC

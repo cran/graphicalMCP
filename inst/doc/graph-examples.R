@@ -13,7 +13,7 @@ library(graphicalMCP)
 set.seed(1234)
 alpha <- 0.025
 m <- 3
-bonferroni_graph <- bonferroni(rep(1 / m, m))
+bonferroni_graph <- bonferroni(m)
 # transitions <- matrix(0, m, m)
 # bonferroni_graph <- graph_create(rep(1 / m, m), transitions)
 
@@ -37,11 +37,40 @@ test_results <-
 
 test_results$outputs$rejected
 
+## ----weighted-bonferroni------------------------------------------------------
+set.seed(1234)
+alpha <- 0.025
+hypotheses <- c(0.5, 0.3, 0.2)
+weighted_bonferroni_graph <- bonferroni_weighted(hypotheses)
+# m <- length(hypotheses)
+# transitions <- matrix(0, m, m)
+# weighted_bonferroni_graph <- graph_create(hypotheses, transitions)
+
+plot(
+  weighted_bonferroni_graph,
+  layout = igraph::layout_in_circle(
+    as_igraph(bonferroni_graph),
+    order = c(2, 1, 3)
+  ),
+  vertex.size = 70
+)
+
+p_values <- runif(m, 0, alpha)
+
+test_results <-
+  graph_test_shortcut(
+    weighted_bonferroni_graph,
+    p = p_values,
+    alpha = alpha
+  )
+
+test_results$outputs$rejected
+
 ## ----bonferroni-holm----------------------------------------------------------
 set.seed(1234)
 alpha <- 0.025
 m <- 3
-holm_graph <- bonferroni_holm(rep(1 / m, m))
+holm_graph <- bonferroni_holm(m)
 # transitions <- matrix(1 / (m - 1), m, m)
 # diag(transitions) <- 0
 # holm_graph <- graph_create(rep(1 / m, m), transitions)
@@ -60,7 +89,31 @@ test_results <- graph_test_shortcut(holm_graph, p = p_values, alpha = alpha)
 
 test_results$outputs$rejected
 
-## ----fixed-sequence-1, fig.dim=c(4.5, 0.9)------------------------------------
+## ----weighted-bonferroni-holm-------------------------------------------------
+set.seed(1234)
+alpha <- 0.025
+hypotheses <- c(0.5, 0.3, 0.2)
+weighted_holm_graph <- bonferroni_holm_weighted(hypotheses)
+# m <- length(hypotheses)
+# transitions <- matrix(1 / (m - 1), m, m)
+# diag(transitions) <- 0
+# weighted_holm_graph <- graph_create(hypotheses, transitions)
+
+plot(weighted_holm_graph,
+  layout = igraph::layout_in_circle(
+    as_igraph(holm_graph),
+    order = c(2, 1, 3)
+  ),
+  vertex.size = 70
+)
+
+p_values <- runif(m, 0, alpha)
+
+test_results <- graph_test_shortcut(weighted_holm_graph, p = p_values, alpha = alpha)
+
+test_results$outputs$rejected
+
+## ----fixed-sequence-----------------------------------------------------------
 set.seed(1234)
 alpha <- 0.025
 m <- 3
@@ -72,7 +125,7 @@ fixed_sequence_graph <- fixed_sequence(m)
 # )
 # fixed_sequence_graph <- graph_create(c(1, 0, 0), transitions)
 
-plot(fixed_sequence_graph, nrow = 1, asp = 0.05, vertex.size = 40)
+plot(fixed_sequence_graph, nrow = 1, asp = 0.5, vertex.size = 50)
 
 p_values <- runif(m, 0, alpha)
 
@@ -85,19 +138,20 @@ test_results <-
 
 test_results$outputs$rejected
 
-## ----fallback, fig.dim=c(4.5, 0.9)--------------------------------------------
+## ----fallback-----------------------------------------------------------------
 set.seed(1234)
 alpha <- 0.025
-m <- 3
-fallback_graph <- fallback(rep(1 / 3, 3))
+hypotheses <- c(0.5, 0.3, 0.2)
+m <- length(hypotheses)
+fallback_graph <- fallback(hypotheses)
 # transitions <- rbind(
 #   c(0, 1, 0),
 #   c(0, 0, 1),
 #   c(0, 0, 0)
 # )
-# fallback_graph <- graph_create(rep(1 / 3, 3), transitions)
+# fallback_graph <- graph_create(hypotheses, transitions)
 
-plot(fallback_graph, nrow = 1, asp = 0.05, vertex.size = 40)
+plot(fallback_graph, nrow = 1, asp = 0.5, vertex.size = 50)
 
 p_values <- runif(m, 0, alpha)
 
@@ -110,44 +164,53 @@ test_results <-
 
 test_results$outputs$rejected
 
-## ----fallback-improved, fig.dim=c(4.5, 0.9)-----------------------------------
+## ----fallback-improved--------------------------------------------------------
 set.seed(1234)
 alpha <- 0.025
-m <- 3
-fallback_improved_1_graph <- fallback_improved_1(rep(1 / 3, 3))
-# hypotheses <- rep(1 / 3, 3)
+hypotheses <- c(0.5, 0.3, 0.2)
+m <- length(hypotheses)
+fallback_improved_1_graph <- fallback_improved_1(hypotheses)
 # transitions <- rbind(
 #   c(0, 1, 0),
 #   c(0, 0, 1),
 #   c(hypotheses[seq_len(m - 1)] / sum(hypotheses[seq_len(m - 1)]), 0)
 # )
-# fallback_improved_1_graph <- graph_create(rep(1 / 3, 3), transitions)
+# fallback_improved_1_graph <- graph_create(hypotheses, transitions)
+plot_layout <- rbind(
+  c(0, 0.8),
+  c(0.8, 0.8),
+  c(0.4, 0)
+)
 
 plot(
   fallback_improved_1_graph,
-  nrow = 1,
-  asp = 0.05,
-  vertex.size = 40,
-  edge_curves = c("pairs" = 7, "H3|H1" = -10)
+  layout = plot_layout,
+  asp = 0.5,
+  edge_curves = c(pairs = 0.5),
+  vertex.size = 70
 )
 
 epsilon <- 0.0001
-fallback_improved_2_graph <- fallback_improved_2(rep(1 / 3, 3), epsilon)
-# hypotheses <- rep(1 / 3, 3)
+fallback_improved_2_graph <- fallback_improved_2(hypotheses, epsilon)
 # transitions <- rbind(
 #   c(0, 1, 0),
 #   c(1 - epsilon, 0, epsilon),
 #   c(1, 0, 0)
 # )
-# fallback_improved_2_graph <- graph_create(rep(1 / 3, 3), transitions)
+# fallback_improved_2_graph <- graph_create(hypotheses, transitions)
+plot_layout <- rbind(
+  c(0, 0.8),
+  c(0.8, 0.8),
+  c(0.4, 0)
+)
 
 plot(
   fallback_improved_2_graph,
-  nrow = 1,
-  asp = 0.05,
+  layout = plot_layout,
   eps = 0.0001,
-  edge_curves = c("pairs" = 7, "H3|H1" = -10),
-  vertex.size = 40
+  asp = 0.5,
+  edge_curves = c(pairs = 0.5),
+  vertex.size = 70
 )
 
 p_values <- runif(m, 0, alpha)
@@ -161,7 +224,7 @@ test_results <-
 
 test_results$outputs$rejected
 
-## ----serial-gatekeeping, fig.dim=c(4.5, 0.9)----------------------------------
+## ----serial-gatekeeping-------------------------------------------------------
 set.seed(1234)
 alpha <- 0.025
 m <- 3
@@ -175,13 +238,19 @@ transitions <- rbind(
 
 serial_gatekeeping_graph <- graph_create(c(0.5, 0.5, 0), transitions)
 
+plot_layout <- rbind(
+  c(0, 0.8),
+  c(0.8, 0.8),
+  c(0.4, 0)
+)
+
 plot(
   serial_gatekeeping_graph,
-  nrow = 1,
-  asp = 0.05,
+  layout = plot_layout,
   eps = 0.0001,
-  edge_curves = c("pairs" = 7, "H3|H1" = -10),
-  vertex.size = 40
+  asp = 0.5,
+  edge_curves = c(pairs = 0.5),
+  vertex.size = 70
 )
 
 p_values <- runif(m, 0, alpha)
@@ -307,11 +376,37 @@ test_results <-
 
 test_results$outputs$rejected
 
+## ----hochberg-----------------------------------------------------------------
+set.seed(1234)
+alpha <- 0.025
+m <- 3
+hochberg_graph <- hochberg(m)
+
+plot(
+  hochberg_graph,
+  layout = igraph::layout_in_circle(
+    as_igraph(hochberg_graph),
+    order = c(2, 1, 3)
+  ),
+  vertex.size = 70
+)
+
+p_values <- runif(m, 0, alpha)
+
+test_results <- graph_test_closure(
+  hochberg_graph,
+  p = p_values,
+  alpha = alpha,
+  test_types = "hochberg"
+)
+
+test_results$outputs$rejected
+
 ## ----hommel-------------------------------------------------------------------
 set.seed(1234)
 alpha <- 0.025
 m <- 3
-hommel_graph <- bonferroni_holm(rep(1 / m, m))
+hommel_graph <- hommel(m)
 
 plot(
   hommel_graph,
@@ -333,11 +428,94 @@ test_results <- graph_test_closure(
 
 test_results$outputs$rejected
 
-## ----dunnett------------------------------------------------------------------
+## ----sidak--------------------------------------------------------------------
 set.seed(1234)
 alpha <- 0.025
 m <- 3
-dunnett_graph <- bonferroni_holm(rep(1 / m, m))
+sidak_graph <- sidak(m)
+
+plot(
+  sidak_graph,
+  layout = igraph::layout_in_circle(
+    as_igraph(bonferroni_graph),
+    order = c(2, 1, 3)
+  ),
+  vertex.size = 70
+)
+
+p_values <- runif(m, 0, alpha)
+corr <- diag(m)
+
+test_results <- graph_test_closure(
+  sidak_graph,
+  p = p_values, alpha = alpha,
+  test_types = "parametric",
+  test_corr = list(corr)
+)
+
+test_results$outputs$rejected
+
+## ----dunnett-test-------------------------------------------------------------
+set.seed(1234)
+alpha <- 0.025
+m <- 3
+dunnett_graph <- dunnett_single_step(m)
+
+plot(
+  dunnett_graph,
+  layout = igraph::layout_in_circle(
+    as_igraph(dunnett_graph),
+    order = c(2, 1, 3)
+  ),
+  vertex.size = 70
+)
+
+p_values <- runif(m, 0, alpha)
+corr <- matrix(0.5, m, m)
+diag(corr) <- 1
+
+test_results <- graph_test_closure(
+  dunnett_graph,
+  p = p_values, alpha = alpha,
+  test_types = "parametric",
+  test_corr = list(corr)
+)
+
+test_results$outputs$rejected
+
+## ----weighted-dunnett-test----------------------------------------------------
+set.seed(1234)
+alpha <- 0.025
+hypotheses <- c(0.5, 0.3, 0.2)
+dunnett_graph <- dunnett_single_step_weighted(hypotheses)
+
+plot(
+  dunnett_graph,
+  layout = igraph::layout_in_circle(
+    as_igraph(dunnett_graph),
+    order = c(2, 1, 3)
+  ),
+  vertex.size = 70
+)
+
+p_values <- runif(m, 0, alpha)
+corr <- matrix(0.5, m, m)
+diag(corr) <- 1
+
+test_results <- graph_test_closure(
+  dunnett_graph,
+  p = p_values, alpha = alpha,
+  test_types = "parametric",
+  test_corr = list(corr)
+)
+
+test_results$outputs$rejected
+
+## ----dunnett-procedure--------------------------------------------------------
+set.seed(1234)
+alpha <- 0.025
+hypotheses <- c(0.5, 0.3, 0.2)
+dunnett_graph <- dunnett_closure_weighted(hypotheses)
 
 plot(
   dunnett_graph,

@@ -7,7 +7,8 @@ knitr::opts_chunk$set(
 
 ## ----create-graph, fig.dim=c(3, 3)--------------------------------------------
 library(graphicalMCP)
-# A graph of two primary hypotheses (H1 and H2) and two secondary hypotheses (H3 and H4)
+# A graph of two primary hypotheses (H1 and H2) and two secondary hypotheses (H3
+# and H4)
 hypotheses <- c(0.5, 0.5, 0, 0)
 transitions <- rbind(
   c(0, 0, 1, 0),
